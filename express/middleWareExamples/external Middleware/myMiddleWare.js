@@ -4,7 +4,7 @@ const myMiddleWare = (req , res , next) =>{
     
 
     console.log(url +" " + method)
-    next();
+    next();ertyuiooooooxxxsssssssšeeeerrtttyyuuuuiooooiydxc n
  }
 
  module.exports = myMiddleWare;
