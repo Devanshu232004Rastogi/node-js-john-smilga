@@ -1,15 +1,11 @@
 const express = require("express");
+const route = express.Router();
+const { people } = require("../../data");
 
-const app = express();
-app.use(express.static(`${__dirname}/methods-public`));
-const { people } = require("./data");
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
-app.get("/api/people", (req, res) => {
+route.get("/", (req, res) => {
   res.status(200).json({ status: "Ok", data: people });
 });
-app.post("/api/people", (req, res) => {
+route.post("/", (req, res) => {
   const { name } = req.body;
 
   if (!name) {
@@ -23,7 +19,7 @@ app.post("/api/people", (req, res) => {
     person: name,
   });
 });
-app.post("/api/postman/people", (req, res) => {
+route.post("/postman", (req, res) => {
   const { name } = req.body;
 
   if (!name) {
@@ -38,7 +34,7 @@ app.post("/api/postman/people", (req, res) => {
   });
 });
 
-app.put("/api/postman/people/:id", (req, res) => {
+route.put("/postman/:id", (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
 
@@ -60,7 +56,7 @@ app.put("/api/postman/people/:id", (req, res) => {
 });
 
 
-app.delete('/api/postman/people/:id',(req,res)=>{
+route.delete('/postman/:id',(req,res)=>{
   const {id} = req.params;
 
   const person = people.find((p)=>p.id ===Number(id));
@@ -76,12 +72,4 @@ app.delete('/api/postman/people/:id',(req,res)=>{
   return res.status(200).json({success:true , data : newP})
 })
 
-app.post("/login", (req, res) => {
-  const { name } = req.body;
-  if (name) {
-    res.status(200).send(`<h1>Hello user</h1>`);
-  } else {
-    res.status(404).send(`<h1>Non Authentic</h1>`);
-  }
-});
-app.listen(5000);
+module.exports = route
