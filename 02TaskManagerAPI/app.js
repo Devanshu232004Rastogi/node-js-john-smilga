@@ -4,12 +4,14 @@ const app = express();
 const PORT = 3000;
 const taskRouters = require("./routes/taskRouter.js");
 const {connectionToDB}  = require("./database/db.js");
-const notFound = require('./middleware/routeNotFound.js')
+const notFound = require('./middleware/routeNotFound.js');
+const errorHandler = require("./middleware/errorMiddleWare.js");
 require("dotenv").config();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/v1/tasks", taskRouters);
 app.use(notFound);
+app.use(errorHandler)
 
 
 const startServer = async () => {
