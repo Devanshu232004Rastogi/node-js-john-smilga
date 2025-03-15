@@ -1,14 +1,34 @@
 const products = require("../models/product");
 
 const productRoute = async (req, res) => {
-  const { featured } = req.query;
+  let { featured, company,name,sort , select } = req.query;
   const queryObject = new Object();
   if (featured) {
     queryObject.featured = featured === true ? true : false;
   }
-  prod = await products.find(queryObject);
+  if (company) {
+    queryObject.company = company;
+  }
+if(name){
+     queryObject.name = { $regex:name , $options :'i' }
+}
+let result =  products.find(queryObject);
+if(sort){
+     const sortList = sort.split(",").join(" ")
+      console.log(sortList)
+     result=result.sort(sortList);
+}
+else{
+     result=result.sort("createdAt");
+}
+
+if(select){
+     select= select.split(",").join(" ")
+     result = result.select(select);
+}
+const prod = await result;
   console.log(queryObject);
-  res.status(200).json({  nBhits: prod.length, prod });
+  res.status(200).json({ nBhits: prod.length, prod });
 };
 const productStaticRoute = (req, res) => {
   //     throw new Error('async-express-error trying')
